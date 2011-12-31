@@ -39,7 +39,7 @@ Rails example:
 
 ``` ruby
 # don't forget to write the appropriate routes
-class MyFirstServiceController
+class MyFirstServiceController < ApplicationController
   def wsdl
     render :xml => MyHelloService.to_wsdl
   end
