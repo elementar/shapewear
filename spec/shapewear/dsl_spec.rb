@@ -24,8 +24,10 @@ describe Shapewear::DSL do
       wsdl_def.should have(1).node
       wsdl_def.xpath("wsdl:service[@name='ParameterlessHelloWorldService']/wsdl:port[@name='ParameterlessHelloWorldServicePort']/soap:address", xmlns).should have(1).node
 
-      # the message elements for input and output must be there, both with a part named 'body'
-      wsdl_def.xpath("wsdl:message[@name='HelloWorldInput']/wsdl:part[@name='body']", xmlns).should have(1).node
+      # the message element for the input should not be there, as the method does not accept parameters
+      wsdl_def.xpath("wsdl:message[@name='HelloWorldInput']", xmlns).should have(0).node
+
+      # the message element for the output must be there, as a simple string
       wsdl_def.xpath("wsdl:message[@name='HelloWorldOutput']/wsdl:part[@name='body']", xmlns).should have(1).node
 
       # there must be an operation named 'HelloWorld'
