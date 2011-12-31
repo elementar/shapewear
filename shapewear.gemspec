@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
   s.rubyforge_project = s.name
 
   s.add_dependency "builder",  ">= 2.1.2"
-  s.add_dependency "nokogiri", ">= 1.4.0"
+  s.add_dependency "nokogiri", ">= 1.5.0"
 
-  s.add_development_dependency "rake",  "~> 0.8.7"
-  s.add_development_dependency "rspec", "~> 2.5.0"
+  s.add_development_dependency "rake",  "~> 0.9.2"
+  s.add_development_dependency "rspec", "~> 2.7.0"
 
   s.files = `git ls-files`.split("\n")
   s.require_path = "lib"
