@@ -46,7 +46,7 @@ module Shapewear
         xm.definitions :name => self.name, 'targetNamespace' => tns,
                        'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
                        'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
-                       'xmlns:xsd1' => xsd, 'tns' => tns do |xdef|
+                       'xmlns:xsd1' => xsd, 'xmlns:tns' => tns do |xdef|
 
           xdef.types do |xtypes|
             xtypes.schema 'xmlns' => 'http://www.w3.org/2000/10/XMLSchema', 'targetNamespace' => xsd do |xschema|
@@ -99,12 +99,13 @@ module Shapewear
       def build_type_elements_for_method(m, xschema)
         # element for method arguments
         um = instance_method(m)
+        op_options = options[:operations][m.to_sym]
 
         if um.arity > 0
           xschema.element :name => "#{m.camelize}Request" do |xreq|
             xreq.complexType do |xct|
               xct.all do |xall|
-                params = options[:operations][m.to_sym][:parameters] rescue nil
+                params = op_options[:parameters] rescue nil
                 if params.nil?
                   if um.respond_to?(:parameters)
                     # with Ruby 1.9, we can create the parameters with the correct names
@@ -126,7 +127,7 @@ module Shapewear
         xschema.element :name => "#{m.camelize}" do |xreq|
           xreq.complexType do |xct|
             xct.all do |xall|
-              ret = config[:returns]
+              ret = op_options[:returns]
               if ret.nil?
                 xall.element :name => 'result', :type => 'xsd:any'
               elsif ret.is_a?(Class)
