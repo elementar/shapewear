@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    shapewear (0.0.1)
+    shapewear (0.0.2)
       builder (>= 2.1.2)
       nokogiri (>= 1.5.0)
 
@@ -11,6 +11,9 @@ GEM
     builder (3.0.0)
     diff-lcs (1.1.3)
     nokogiri (1.5.0)
+    rack (1.4.0)
+    rack-test (0.6.1)
+      rack (>= 1.0)
     rake (0.9.2.2)
     rspec (2.7.0)
       rspec-core (~> 2.7.0)
@@ -25,6 +28,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rack-test
   rake (~> 0.9.2)
   rspec (~> 2.7.0)
   shapewear!

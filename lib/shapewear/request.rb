@@ -1,0 +1,3 @@
+module Shapewear::Request
+
+end

@@ -3,11 +3,13 @@ require 'nokogiri'
 require 'shapewear/version'
 require 'shapewear/dsl'
 require 'shapewear/wsdl'
+require 'shapewear/request'
 
 module Shapewear
   def self.included(receiver)
     receiver.extend(Shapewear::DSL)
     receiver.extend(Shapewear::WSDL)
+    receiver.extend(Shapewear::Request)
   end
 end
 
