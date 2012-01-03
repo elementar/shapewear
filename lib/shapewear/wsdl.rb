@@ -67,7 +67,7 @@ module Shapewear
     def build_type_elements_for_method(m, xschema)
       # element for method arguments
       um = instance_method(m)
-      op_options = options[:operations][m.to_sym]
+      op_options = options[:operations][m.to_sym] rescue nil
 
       if um.arity > 0
         xschema.element :name => "#{m.camelize}Request" do |xreq|
@@ -95,7 +95,7 @@ module Shapewear
       xschema.element :name => "#{m.camelize}" do |xreq|
         xreq.complexType do |xct|
           xct.all do |xall|
-            ret = op_options[:returns]
+            ret = op_options[:returns] rescue nil
             if ret.nil?
               xall.element :name => 'result', :type => 'xsd:any'
             elsif ret.is_a?(Class)

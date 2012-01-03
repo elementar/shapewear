@@ -7,7 +7,7 @@ describe Shapewear::DSL do
   describe "basic DSL" do
     it "should describe parameterless, 'hello world' services" do
       class ParameterlessHelloWorldService
-        include Shapewear::DSL
+        include Shapewear
 
         def hello_world
           "hello"
