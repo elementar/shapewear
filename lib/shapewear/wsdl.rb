@@ -116,6 +116,7 @@ module Shapewear
       if t.is_a?(Class)
         return 'xsd:string' if t == String
         return 'xsd:integer' if t == Fixnum
+        return 'xsd:dateTime' if t == DateTime
         return 'xsd:any' if t == Object
         raise "Could not convert type #{t} to a valid XSD type"
       elsif t.is_a?(Hash)
