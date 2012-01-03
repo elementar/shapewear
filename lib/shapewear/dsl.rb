@@ -132,6 +132,10 @@ module Shapewear
                 xall.element :name => 'result', :type => 'xsd:any'
               elsif ret.is_a?(Class)
                 xall.element :name => 'result', :type => to_xsd_type(ret)
+              elsif ret.is_a?(Hash)
+                ret.each do |name, type|
+                  xall.element :name => name, :type => to_xsd_type(type)
+                end
               else
                 raise "Could not interpret #{ret.inspect} as a return type definition"
               end
