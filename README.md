@@ -21,14 +21,24 @@ First, describe your SOAP service:
 require "shapewear"
 
 class MyFirstService
-  include Shapewear::DSL
+  include Shapewear
 
+  wsdl_namespace 'http://services.example.com/v1'
+  schema_namespace 'http://schemas.example.com/v1'
+
+  operation :hello, :parameters => [[:name, String]], :returns => String
   def hello(name)
     "hello, #{name}"
   end
 
+  operation :sum, :parameters => [[:x, Fixnum], [:y, Fixnum]], :returns => Fixnum
   def sum(x, y)
     x + y
+  end
+
+  operation :get_user_info, :parameters => [[:email, String]], :returns => { :name => String, :birthday => DateTime }
+  def get_user_info(email)
+    User.find_by_email(email)
   end
 end
 ```
