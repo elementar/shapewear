@@ -31,6 +31,8 @@ class MyFirstService
   wsdl_namespace 'http://services.example.com/v1'
   schema_namespace 'http://schemas.example.com/v1'
 
+  endpoint_url 'http://localhost:3000/my_first_service'
+
   operation :hello, :parameters => [[:name, String]], :returns => String
   def hello(name)
     "hello, #{name}"
