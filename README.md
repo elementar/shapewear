@@ -3,6 +3,11 @@ shapewear [![Build Status](https://secure.travis-ci.org/elementar/shapewear.png)
 
 Make your fat service look skinny.
 
+Work in Progress
+----------------
+
+This gem is still in early development, and it's not yet yet ready for use. Any contribution and feedback is welcome.
+
 Installation
 ------------
 
