@@ -4,8 +4,8 @@ require 'builder'
 module Shapewear::WSDL
   # reference: http://www.w3.org/TR/wsdl
   def to_wsdl
-    tns = options[:wsdl_namespace] || "http://shapewear.elementarsistemas.com.br/auto/#{self.name}.wsdl"
-    xsd = options[:schema_namespace] || "http://shapewear.elementarsistemas.com.br/auto/#{self.name}.xsd"
+    tns = options[:wsdl_namespace] || "http://services.example.com/#{self.name}"
+    xsd = options[:schema_namespace] || "http://schema.example.com/#{self.name}"
 
     xm = Builder::XmlMarkup.new
 

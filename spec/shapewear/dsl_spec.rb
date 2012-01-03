@@ -6,26 +6,22 @@ describe Shapewear::DSL do
 
   describe "basic DSL" do
     it "should describe a minimal working service" do
-      wsdl = MininalWorkingService.to_wsdl
+      wsdl = MinimalWorkingService.to_wsdl
       puts wsdl
-      wsdl_doc = nil
 
       # wsdl should be valid XML (duh!)
-      expect { wsdl_doc = Nokogiri::XML(wsdl) { |c| c.strict } }.not_to raise_error
+      expect { Nokogiri::XML(wsdl) { |c| c.strict } }.not_to raise_error
 
-      # there should be a definition with the class' name
-      wsdl_def = wsdl_doc.xpath("/wsdl:definitions[@name='MininalWorkingService']", xmlns)
-      wsdl_def.should have(1).node
+      # wasabi should be able to parse it
+      wdoc = nil
+      expect { wdoc = Wasabi.document wsdl }.not_to raise_error
 
-      # the message element for the input should not be there, as the method does not accept parameters
-      wsdl_def.xpath("wsdl:message[@name='HelloWorldInput']", xmlns).should have(0).node
+      wdoc.namespace.should match /MinimalWorkingService/
+      wdoc.soap_actions.should == [:hello_world]
 
-      # the message element for the output must be there, as a simple string
-      wsdl_def.xpath("wsdl:message[@name='HelloWorldOutput']/wsdl:part", xmlns).should have(1).node
-
-      # there must be an operation named 'HelloWorld'
-      wsdl_def.xpath("wsdl:portType/wsdl:operation[@name='HelloWorld']", xmlns).should have(1).node
-      wsdl_def.xpath("wsdl:binding/wsdl:operation[@name='HelloWorld']", xmlns).should have(1).node
+      wdoc.operations[:hello_world].should_not be_nil
+      wdoc.operations[:hello_world][:input].should == 'HelloWorld'
+      wdoc.operations[:hello_world][:input].should match /HelloWorld$/
     end
   end
 
