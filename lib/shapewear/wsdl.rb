@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'builder'
 
 #noinspection RubyArgCount,RubyResolve
@@ -42,14 +44,14 @@ module Shapewear::WSDL
       end
 
       xdef.binding :name => "#{self.name}Binding", :type => "tns:#{self.name}PortType" do |xbind|
-        xbind.tag! 'soap:binding', :style => 'document', :transport => 'http://schemas.xmlsoap.org/soap/http'
+        xbind.tag! 'soap:binding', :style => 'rpc', :transport => 'http://schemas.xmlsoap.org/soap/http'
         operations.each do |op, op_opts|
           xbind.operation :name => op_opts[:public_name] do |xop|
             doc = op_opts[:documentation] rescue nil
             xop.documentation doc unless doc.nil?
             xop.tag! 'soap:operation', :soapAction => "#{namespaces['tns']}/#{op_opts[:public_name]}"
-            xop.input { |xin| xin.tag! 'soap:body', :use => 'literal' } unless instance_method(op).arity == 0
-            xop.output { |xin| xin.tag! 'soap:body', :use => 'literal' }
+            xop.input { |xin| xin.tag! 'soap:body', :use => 'literal', :namespace => namespaces['tns'] } unless instance_method(op).arity == 0
+            xop.output { |xin| xin.tag! 'soap:body', :use => 'literal', :namespace => namespaces['tns'] }
           end
         end
       end
@@ -106,7 +108,7 @@ module Shapewear::WSDL
     end
 
     # element for method result
-    xschema.element :name => "#{op_options[:public_name]}" do |xreq|
+    xschema.element :name => "#{op_options[:public_name]}Response" do |xreq|
       xreq.complexType do |xct|
         xct.all do |xall|
           ret = op_options[:returns] rescue nil

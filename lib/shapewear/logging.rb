@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Shapewear::Logging
   def logger
     @logger ||= (::Rails.logger rescue Logger.new(STDOUT))

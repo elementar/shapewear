@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'builder'
 
 module Shapewear::DSL
@@ -18,7 +20,7 @@ module Shapewear::DSL
                 'xsd1' => "http://schema.example.com/#{self.name}",
                 'wsdl' => 'http://schemas.xmlsoap.org/wsdl/',
                 'soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
-                'xsd' => 'http://www.w3.org/2000/10/XMLSchema',
+                'xsd' => 'http://www.w3.org/2001/XMLSchema',
                 'env' => 'http://schemas.xmlsoap.org/soap/envelope/'
   end
 

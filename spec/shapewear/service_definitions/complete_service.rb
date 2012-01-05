@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 # This class represents a fully customized service.
 # It is used to test the extensiveness of the Shapewear DSL.
 class CompleteService

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Shapewear::Request
   # @param request [Rack::Request, Hash]
   def serve(request)
