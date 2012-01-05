@@ -7,14 +7,29 @@ module Shapewear::DSL
     @options ||= {}
   end
 
+  def operations
+    options[:operations] ||= {}
+  end
+
+  def namespaces
+    options[:namespaces] ||=
+      Hash.new { |_, k| raise "Namespace not defined: #{k}" } \
+        .merge! 'tns' => "http://services.example.com/#{self.name}",
+                'xsd1' => "http://schema.example.com/#{self.name}",
+                'wsdl' => 'http://schemas.xmlsoap.org/wsdl/',
+                'soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
+                'xsd' => 'http://www.w3.org/2000/10/XMLSchema',
+                'env' => 'http://schemas.xmlsoap.org/soap/envelope/'
+  end
+
   protected
 
   def wsdl_namespace(ns)
-    options[:wsdl_namespace] = ns
+    namespaces['tns'] = ns
   end
 
   def schema_namespace(ns)
-    options[:schema_namespace] = ns
+    namespaces['xsd1'] = ns
   end
 
   def endpoint_url(url)
@@ -22,6 +37,7 @@ module Shapewear::DSL
   end
 
   def operation(name, ops = {})
-    (options[:operations] ||= {})[name] = ops
+    h = (operations[name] ||= {}).merge! ops
+    h[:public_name] ||= name.to_s.camelize
   end
 end

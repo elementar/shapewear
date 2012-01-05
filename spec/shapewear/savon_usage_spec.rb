@@ -16,7 +16,10 @@ describe Shapewear do
         soap.body = {:text => 'uppercase text'}
       end
 
-      response.text.should == 'UPPERCASE TEXT'
+      puts response.inspect
+      puts response.body.inspect
+
+      response.body[:echo_in_uppercase_response][:body].should == 'UPPERCASE TEXT'
     end
   end
 end

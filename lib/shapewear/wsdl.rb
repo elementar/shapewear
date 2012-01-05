@@ -4,19 +4,17 @@ require 'builder'
 module Shapewear::WSDL
   # reference: http://www.w3.org/TR/wsdl
   def to_wsdl
-    tns = options[:wsdl_namespace] || "http://services.example.com/#{self.name}"
-    xsd = options[:schema_namespace] || "http://schema.example.com/#{self.name}"
-
     xm = Builder::XmlMarkup.new
 
     xm.instruct!
-    xm.definitions :name => self.name, 'targetNamespace' => tns,
-                   'xmlns' => 'http://schemas.xmlsoap.org/wsdl/',
-                   'xmlns:soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
-                   'xmlns:xsd1' => xsd, 'xmlns:tns' => tns do |xdef|
+    xm.definitions :name => self.name, 'targetNamespace' => namespaces['tns'],
+                   'xmlns' => namespaces['wsdl'],
+                   'xmlns:soap' => namespaces['soap'],
+                   'xmlns:xsd1' => namespaces['xsd1'],
+                   'xmlns:tns' => namespaces['tns'] do |xdef|
 
       xdef.types do |xtypes|
-        xtypes.schema 'xmlns' => 'http://www.w3.org/2000/10/XMLSchema', 'targetNamespace' => xsd do |xschema|
+        xtypes.schema 'xmlns' => namespaces['xsd'], 'targetNamespace' => namespaces['xsd1'] do |xschema|
 
           # define elements for each defined method
           instance_methods(false).each do |m|
@@ -45,12 +43,12 @@ module Shapewear::WSDL
 
       xdef.binding :name => "#{self.name}Binding", :type => "tns:#{self.name}PortType" do |xbind|
         xbind.tag! 'soap:binding', :style => 'document', :transport => 'http://schemas.xmlsoap.org/soap/http'
-        instance_methods(false).each do |m|
-          xbind.operation :name => m.camelize do |xop|
-            doc = options[:operations][m.to_sym][:documentation] rescue nil
+        operations.each do |op, op_opts|
+          xbind.operation :name => op_opts[:public_name] do |xop|
+            doc = op_opts[:documentation] rescue nil
             xop.documentation doc unless doc.nil?
-            xop.tag! 'soap:operation', :soapAction => "#{tns}/#{m.camelize}"
-            xop.input { |xin| xin.tag! 'soap:body', :use => 'literal' } unless instance_method(m).arity == 0
+            xop.tag! 'soap:operation', :soapAction => "#{namespaces['tns']}/#{op_opts[:public_name]}"
+            xop.input { |xin| xin.tag! 'soap:body', :use => 'literal' } unless instance_method(op).arity == 0
             xop.output { |xin| xin.tag! 'soap:body', :use => 'literal' }
           end
         end
@@ -71,7 +69,7 @@ module Shapewear::WSDL
     op_options = options[:operations][m.to_sym] rescue nil
 
     if um.arity > 0
-      xschema.element :name => "#{m.camelize}Request" do |xreq|
+      xschema.element :name => "#{op_options[:public_name]}Request" do |xreq|
         xreq.complexType do |xct|
           xct.all do |xall|
             params = op_options[:parameters] rescue nil
@@ -108,7 +106,7 @@ module Shapewear::WSDL
     end
 
     # element for method result
-    xschema.element :name => "#{m.camelize}" do |xreq|
+    xschema.element :name => "#{op_options[:public_name]}" do |xreq|
       xreq.complexType do |xct|
         xct.all do |xall|
           ret = op_options[:returns] rescue nil
