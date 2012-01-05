@@ -2,7 +2,7 @@
 
 Shapewear make your fat service look skinny.
 
-Most of the inspiration for this gem came from [Savon][http://savonrb.com/] and [HTTParty][http://httparty.rubyforge.org/], thanks Daniel Harrington and John Nunemaker!
+Most of the inspiration for this gem came from [http://savonrb.com/][Savon] and [http://httparty.rubyforge.org/][HTTParty], thanks Daniel Harrington and John Nunemaker!
 
 ## Work in Progress
 
