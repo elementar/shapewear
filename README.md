@@ -62,7 +62,7 @@ class MyFirstServiceController < ApplicationController
   end
 
   def serve
-    render :xml => MyHelloService.serve(params)
+    render :xml => MyHelloService.serve(request)
   end
 end
 ```
@@ -78,7 +78,7 @@ class MySinatraApp < Sinatra::App
 
   post "my_first_service" do
     content_type "application/xml"
-    MyHelloService.serve(params)
+    MyHelloService.serve(request)
   end
 end
 ```
