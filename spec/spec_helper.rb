@@ -1,6 +1,8 @@
 require "bundler"
 Bundler.require :default, :development
 
+require 'webmock/rspec'
+
 RSpec.configure do |config|
 end
 
