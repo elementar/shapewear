@@ -1,15 +1,20 @@
-shapewear [![Build Status](https://secure.travis-ci.org/elementar/shapewear.png)](http://travis-ci.org/elementar/shapewear)
-=========
+# shapewear [![Build Status](https://secure.travis-ci.org/elementar/shapewear.png)](http://travis-ci.org/elementar/shapewear)
 
-Make your fat service look skinny.
+Shapewear make your fat service look skinny.
 
-Work in Progress
-----------------
+Most of the inspiration for this gem came from [Savon][http://savonrb.com/] and [HTTParty][http://httparty.rubyforge.org/], thanks Daniel Harrington and John Nunemaker!
 
-This gem is still in early development, and it's not yet yet ready for use. Any contribution and feedback is welcome.
+## Work in Progress
 
-Installation
-------------
+This gem is still in early development. It's only working for some very basic cases. Any contribution and feedback is welcome.
+
+### Roadmap
+
+* Add more tests;
+* Add support for SOAP 1.2;
+* Add cleaner integration on Rails and Sinatra (Rack middleware?).
+
+## Installation
 
 Shapewear is available through [Rubygems](http://rubygems.org/gems/shapewear) and can be installed via:
 
