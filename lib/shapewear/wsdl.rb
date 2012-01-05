@@ -25,7 +25,7 @@ module Shapewear::WSDL
         end
       end
 
-      operations.each do |_, op_opts|
+      operations.each do |m, op_opts|
         xdef.message :name => "#{op_opts[:public_name]}Input" do |xmsg|
           xmsg.part :name => :body, :element => "xsd1:#{op_opts[:public_name]}Request"
         end unless instance_method(m).arity == 0
@@ -35,7 +35,7 @@ module Shapewear::WSDL
       end
 
       xdef.portType :name => "#{self.name}PortType" do |xpt|
-        operations.each do |_, op_opts|
+        operations.each do |m, op_opts|
           xpt.operation :name => op_opts[:public_name] do |xop|
             xop.input :message => "tns:#{op_opts[:public_name]}Input" unless instance_method(m).arity == 0
             xop.output :message => "tns:#{op_opts[:public_name]}Output"
