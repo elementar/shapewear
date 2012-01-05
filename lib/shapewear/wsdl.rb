@@ -19,26 +19,26 @@ module Shapewear::WSDL
         xtypes.schema 'xmlns' => namespaces['xsd'], 'targetNamespace' => namespaces['xsd1'] do |xschema|
 
           # define elements for each defined method
-          instance_methods(false).each do |m|
-            build_type_elements_for_method(m, xschema)
+          operations.each do |m, op_opts|
+            build_type_elements_for_method(m, op_opts, xschema)
           end
         end
       end
 
-      instance_methods(false).each do |m|
-        xdef.message :name => "#{m.camelize}Input" do |xmsg|
-          xmsg.part :name => :body, :element => "xsd1:#{m.camelize}Request"
+      operations.each do |_, op_opts|
+        xdef.message :name => "#{op_opts[:public_name]}Input" do |xmsg|
+          xmsg.part :name => :body, :element => "xsd1:#{op_opts[:public_name]}Request"
         end unless instance_method(m).arity == 0
-        xdef.message :name => "#{m.camelize}Output" do |xmsg|
-          xmsg.part :name => :body, :element => "xsd1:#{m.camelize}Response"
+        xdef.message :name => "#{op_opts[:public_name]}Output" do |xmsg|
+          xmsg.part :name => :body, :element => "xsd1:#{op_opts[:public_name]}Response"
         end
       end
 
       xdef.portType :name => "#{self.name}PortType" do |xpt|
-        instance_methods(false).each do |m|
-          xpt.operation :name => m.camelize do |xop|
-            xop.input :message => "tns:#{m.camelize}Input" unless instance_method(m).arity == 0
-            xop.output :message => "tns:#{m.camelize}Output"
+        operations.each do |_, op_opts|
+          xpt.operation :name => op_opts[:public_name] do |xop|
+            xop.input :message => "tns:#{op_opts[:public_name]}Input" unless instance_method(m).arity == 0
+            xop.output :message => "tns:#{op_opts[:public_name]}Output"
           end
         end
       end
@@ -65,10 +65,9 @@ module Shapewear::WSDL
     end
   end
 
-  def build_type_elements_for_method(m, xschema)
+  def build_type_elements_for_method(m, op_options, xschema)
     # element for method arguments
     um = instance_method(m)
-    op_options = options[:operations][m.to_sym] rescue nil
 
     if um.arity > 0
       xschema.element :name => "#{op_options[:public_name]}Request" do |xreq|
