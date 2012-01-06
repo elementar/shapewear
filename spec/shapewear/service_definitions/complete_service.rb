@@ -6,7 +6,6 @@ class CompleteService
   include Shapewear
 
   wsdl_namespace 'http://services.example.com/v1'
-  schema_namespace 'http://schemas.example.com/v1'
 
   endpoint_url 'http://services.example.com/complete/soap'
 

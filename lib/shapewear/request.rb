@@ -55,7 +55,7 @@ module Shapewear::Request
 
     xb.Envelope :xmlns => namespaces['env'] do |xenv|
       xenv.Body do |xbody|
-        xbody.tag! "#{op_options[:public_name]}Response", :xmlns => namespaces['xsd1'] do |xres|
+        xbody.tag! "#{op_options[:public_name]}Response", :xmlns => namespaces['tns'] do |xres|
           xres.body r
         end
       end

@@ -35,7 +35,6 @@ class MyFirstService
   include Shapewear
 
   wsdl_namespace 'http://services.example.com/v1'
-  schema_namespace 'http://schemas.example.com/v1'
 
   endpoint_url 'http://localhost:3000/my_first_service'
 
