@@ -12,6 +12,7 @@ module Shapewear::WSDL
     xm.definitions :name => self.name, 'targetNamespace' => namespaces['tns'],
                    'xmlns' => namespaces['wsdl'],
                    'xmlns:soap' => namespaces['soap'],
+                   'xmlns:xsd' => namespaces['xsd'],
                    'xmlns:xsd1' => namespaces['xsd1'],
                    'xmlns:tns' => namespaces['tns'] do |xdef|
 
