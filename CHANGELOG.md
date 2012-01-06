@@ -2,7 +2,9 @@
 
 ## 0.0.5
 * Removed the dual-namespace option. Now there's only one.
-*
+* Generating WSDL for SOAP 1.2;
+* Added an option on the DSL to change the service name;
+* Changed some conventions on the generated WSDL so Visual Studio .NET can understand it better.
 
 ## 0.0.4
 * Fixed the samples;
