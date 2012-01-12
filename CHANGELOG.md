@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+* Added support for SOAP 1.2 Faults;
+* Refactored the request handling into its own class.
+
 ## 0.1.0
 * Added specs and fixed basic support for SOAP:Fault.
 
