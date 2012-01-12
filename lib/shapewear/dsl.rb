@@ -21,7 +21,8 @@ module Shapewear::DSL
                 'soap' => 'http://schemas.xmlsoap.org/wsdl/soap/',
                 'soap12' => 'http://schemas.xmlsoap.org/wsdl/soap12/',
                 'xsd' => 'http://www.w3.org/2001/XMLSchema',
-                'env' => 'http://schemas.xmlsoap.org/soap/envelope/'
+                'env' => 'http://schemas.xmlsoap.org/soap/envelope/',
+                'env12' => 'http://www.w3.org/2001/12/soap-envelope'
   end
 
   protected

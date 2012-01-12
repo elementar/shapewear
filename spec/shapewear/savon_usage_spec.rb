@@ -25,14 +25,25 @@ describe Shapewear do
         response.body[:echo_in_uppercase_response][:body].should == 'UPPERCASE TEXT'
       end
 
-      it "should raise SOAP:Faults" do
+      it "should raise SOAP 1.1 Faults" do
         client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
 
         expect {
           client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
             soap.body = { :id => 55 }
           end
-        }.to raise_error Savon::SOAP::Fault, "(RuntimeError) ID must be 0 or 1"
+        }.to raise_error Savon::SOAP::Fault, "(e:Server.RuntimeError) ID must be 0 or 1"
+      end
+
+      it "should raise SOAP 1.2 Faults" do
+        client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
+
+        expect {
+          client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
+            soap.version = 2
+            soap.body = { :id => 55 }
+          end
+        }.to raise_error Savon::SOAP::Fault, "(e:Server.RuntimeError) ID must be 0 or 1"
       end
     end
   end
