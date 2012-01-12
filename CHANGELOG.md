@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.6
+* Added basic support for SOAP:Fault.
+
 ## 0.0.5
 * Removed the dual-namespace option. Now there's only one.
 * Generating WSDL for SOAP 1.2;
