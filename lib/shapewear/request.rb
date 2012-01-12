@@ -72,8 +72,8 @@ module Shapewear::Request
     xb.Envelope :xmlns => namespaces['env'] do |xenv|
       xenv.Body do |xbody|
         xbody.Fault do |xf|
-          xf.faultcode e.class.name
-          xf.faultstring e.message
+          xf.faultcode ex.class.name
+          xf.faultstring ex.message
         end
       end
     end

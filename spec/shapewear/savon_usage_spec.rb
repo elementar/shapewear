@@ -6,22 +6,34 @@ describe Shapewear do
   describe "usage with SOAP clients" do
     before do
       stub_request(:get, "http://services.example.com/complete/soap/wsdl") \
-        .to_return :body => CompleteService.to_wsdl, :headers => {'Content-Type' => 'application/xml'}
+        .to_return :body => CompleteService.to_wsdl, :headers => { 'Content-Type' => 'application/xml' }
 
       stub_request(:post, "http://services.example.com/complete/soap") \
-        .to_return :body => lambda { |r| CompleteService.serve(r) }, :headers => {'Content-Type' => 'application/xml'}
+        .to_return :body => lambda { |r| CompleteService.serve(r) }, :headers => { 'Content-Type' => 'application/xml' }
     end
 
-    it "should work with Savon" do
-      client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
-      response = client.request :echo_in_uppercase, :xmlns => 'http://services.example.com/v1' do
-        soap.body = {:text => 'uppercase text'}
+    describe "Savon" do
+      it "should work for simple requests" do
+        client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
+        response = client.request :echo_in_uppercase, :xmlns => 'http://services.example.com/v1' do
+          soap.body = { :text => 'uppercase text' }
+        end
+
+        puts response.inspect
+        puts response.body.inspect
+
+        response.body[:echo_in_uppercase_response][:body].should == 'UPPERCASE TEXT'
       end
 
-      puts response.inspect
-      puts response.body.inspect
+      it "should raise SOAP:Faults" do
+        client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
 
-      response.body[:echo_in_uppercase_response][:body].should == 'UPPERCASE TEXT'
+        expect {
+          client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
+            soap.body = { :id => 55 }
+          end
+        }.to raise_error Savon::SOAP::Fault, "(RuntimeError) ID must be 0 or 1"
+      end
     end
   end
 end
