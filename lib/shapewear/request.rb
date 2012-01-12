@@ -62,7 +62,20 @@ module Shapewear::Request
     end
   end
 
+  #noinspection RubyArgCount
   def serialize_soap_fault(ex)
-    raise ex
+    logger.debug "Serializing SOAP Fault: #{ex.inspect}"
+
+    xb = Builder::XmlMarkup.new
+    xb.instruct!
+
+    xb.Envelope :xmlns => namespaces['env'] do |xenv|
+      xenv.Body do |xbody|
+        xbody.Fault do |xf|
+          xf.faultcode e.class.name
+          xf.faultstring e.message
+        end
+      end
+    end
   end
 end
