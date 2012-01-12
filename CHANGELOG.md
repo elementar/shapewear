@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.0
+* Added specs and fixed basic support for SOAP:Fault.
+
 ## 0.0.6
 * Added basic support for SOAP:Fault.
 
