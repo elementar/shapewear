@@ -39,14 +39,6 @@ class CompleteService
     end
   end
 
-  def reset(chave)
-    raise "Operação não permitida" if ::Rails.env.production?
-    c = Conector::Registro.find_by_chave_registro(chave)
-    c.reset!
-
-    'ok'
-  end
-
   class Structured < Struct.new(:text, :random_value, :created_at)
     def initialize(text)
       @text = text
