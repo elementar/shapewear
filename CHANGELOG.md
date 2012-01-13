@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.7
+## 0.1.8
 * Better key lookup on hashes.
 * Changed #camelize to work the same way as in Rails.
 
