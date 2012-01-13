@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.5
+* #camelize in parameters and complex types is only called if they are declared as symbols.
+  This allows usage of custom character casing when writing the SOAP services.
+* Parameters are now camelized with first letter as lowercase.
+
 ## 0.1.4
 * Parameters are now read in the correct order, as specified in the metadata;
 * Complex return types are now working correctly;
