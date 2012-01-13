@@ -21,7 +21,7 @@ class CompleteService
             :returns => {:text => String, :random_value => Fixnum, :created_at => DateTime}
 
   def echo_in_uppercase(text)
-    text.upcase
+    text.upcase unless text.nil?
   end
 
   def sum(x, y)

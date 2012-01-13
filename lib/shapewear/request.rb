@@ -49,7 +49,7 @@ module Shapewear::Request
       operations.each do |k, v|
         if v[:public_name] == op_node.name
           logger.debug "Extracting parameters from operation node..."
-          params = extract_parameters(@op_node)
+          params = extract_parameters(v, op_node)
           logger.debug "Creating new instance of #{clazz}..."
           obj = clazz.new
           logger.debug "Calling #{k} with args: #{params.map(&:inspect) * ', '}"
@@ -67,9 +67,25 @@ module Shapewear::Request
       raise "Operation not found: #{@op_node.name}"
     end
 
-    def extract_parameters(node)
-      # TODO: use the metadata collected from the DSL to reoder the parameters and perform the appropriate conversions
-      node.children.map { |n| n.text }
+    def extract_parameters(op_options, node)
+      logger.debug "Operation node: #{node.inspect}"
+      r = []
+      op_options[:parameters].each do |p|
+        logger.debug "  Looking for: tns:#{p.first.to_s.camelize}"
+        v = node.xpath("tns:#{p.first.to_s.camelize}", namespaces).first
+        if v.nil?
+          # does nothing
+        elsif p.last == Fixnum
+          v = v.text.to_i
+        elsif p.last == DateTime
+          v = DateTime.parse(v.text) # TODO: add tests
+        else
+          v = v.text
+        end
+        logger.debug "    Found: #{v.inspect}"
+        r << v
+      end
+      r
     end
 
     #noinspection RubyArgCount
@@ -77,12 +93,45 @@ module Shapewear::Request
       xb = Builder::XmlMarkup.new
       xb.instruct!
 
-      xb.Envelope :xmlns => soap_env_ns do |xenv|
+      xb.Envelope :xmlns => soap_env_ns, 'xmlns:xsi' => namespaces['xsi'] do |xenv|
         xenv.Body do |xbody|
-          xbody.tag! "#{op_options[:public_name]}Response", :xmlns => namespaces['tns'] do |xres|
-            xres.body r
+          xbody.tag! "#{op_options[:public_name]}Response", :xmlns => namespaces['tns'] do |xresp|
+
+            if r.nil?
+              xresp.tag! "#{op_options[:public_name]}Result", 'xsi:nil' => 'true'
+            else
+              ret = op_options[:returns] rescue nil
+              case ret
+                when NilClass, Class
+                  xresp.tag! "#{op_options[:public_name]}Result", r
+                when Hash
+                  xresp.tag! "#{op_options[:public_name]}Result" do |xres|
+                    ret.each do |k, v|
+                      extract_and_serialize_value(xres, r, k, v)
+                    end
+                  end
+                else
+                  raise "Unsupported return type: #{ret.inspect}"
+              end
+            end
           end
         end
+      end
+    end
+
+    def extract_and_serialize_value(builder, obj, field, type)
+      v = if obj.is_a?(Hash)
+        obj[field]
+      elsif obj.respond_to?(field)
+        obj.send(field)
+      else
+        raise "Could not extract #{field.inspect} from object: #{obj.inspect}"
+      end
+
+      if v.nil?
+        builder.tag! field.to_s.camelize, 'xsi:nil' => 'true'
+      else
+        builder.tag! field.to_s.camelize, v
       end
     end
 

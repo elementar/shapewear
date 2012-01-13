@@ -16,13 +16,35 @@ describe Shapewear do
       it "should work for simple requests" do
         client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
         response = client.request :echo_in_uppercase, :xmlns => 'http://services.example.com/v1' do
-          soap.body = { :text => 'uppercase text' }
+          soap.body = { 'Text' => 'uppercase text' }
         end
 
         puts response.inspect
         puts response.body.inspect
 
-        response.body[:echo_in_uppercase_response][:body].should == 'UPPERCASE TEXT'
+        response.body[:echo_in_uppercase_response][:echo_in_uppercase_result].should == 'UPPERCASE TEXT'
+      end
+
+      it "should work for structured responses from objects" do
+        client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
+        response = client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
+          soap.body = { 'Id' => 0 }
+        end
+
+        r = response.body[:get_structured_data_response][:get_structured_data_result]
+        r.should be_a Hash
+        r.should include :text => 'text from the struct'
+      end
+
+      it "should work for structured responses from hashes" do
+        client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
+        response = client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
+          soap.body = { 'Id' => 1 }
+        end
+
+        r = response.body[:get_structured_data_response][:get_structured_data_result]
+        r.should be_a Hash
+        r.should include :text => 'text from a hash'
       end
 
       it "should raise SOAP 1.1 Faults" do
@@ -30,7 +52,7 @@ describe Shapewear do
 
         expect {
           client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
-            soap.body = { :id => 55 }
+            soap.body = { 'Id' => 55 }
           end
         }.to raise_error Savon::SOAP::Fault, "(e:Server.RuntimeError) ID must be 0 or 1"
       end
@@ -41,7 +63,7 @@ describe Shapewear do
         expect {
           client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
             soap.version = 2
-            soap.body = { :id => 55 }
+            soap.body = { 'Id' => 55 }
           end
         }.to raise_error Savon::SOAP::Fault, "(e:Server.RuntimeError) ID must be 0 or 1"
       end
