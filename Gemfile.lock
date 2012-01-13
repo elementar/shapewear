@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    shapewear (0.1.1)
+    shapewear (0.1.2)
       builder (>= 2.1.2)
       nokogiri (>= 1.5.0)
 

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.2
+* Fixed a bug when returning SOAP:Faults.
+
 ## 0.1.1
 * Added support for SOAP 1.2 Faults;
 * Refactored the request handling into its own class.
