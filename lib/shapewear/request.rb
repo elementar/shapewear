@@ -67,6 +67,11 @@ module Shapewear::Request
       raise "Operation not found: #{@op_node.name}"
     end
 
+    # Extracts all parameters from the operation node, and return as an array.
+    #
+    # @param op_options [Hash] The operation options.
+    # @param node [Nokogiri::XML] The operation node.
+    # @return [Array] The parsed parameters.
     def extract_parameters(op_options, node)
       logger.debug "Operation node: #{node.inspect}"
       r = []
@@ -88,6 +93,10 @@ module Shapewear::Request
       r
     end
 
+    # Serializes the result of an operation as a SOAP Envelope.
+    #
+    # @param op_options [Hash] The operation options.
+    # @param r [Hash,Object] The operation result.
     #noinspection RubyArgCount
     def serialize_soap_result(op_options, r)
       xb = Builder::XmlMarkup.new
@@ -96,7 +105,6 @@ module Shapewear::Request
       xb.Envelope :xmlns => soap_env_ns, 'xmlns:xsi' => namespaces['xsi'] do |xenv|
         xenv.Body do |xbody|
           xbody.tag! "#{op_options[:public_name]}Response", :xmlns => namespaces['tns'] do |xresp|
-
             if r.nil?
               xresp.tag! "#{op_options[:public_name]}Result", 'xsi:nil' => 'true'
             else
@@ -119,9 +127,15 @@ module Shapewear::Request
       end
     end
 
+    # Extracts a field from an object, casts it to the appropriate type, and serializes as XML.
+    #
+    # @param builder [Builder::XmlMarkup] The XML builder.
+    # @param obj [Hash,Object] The resulting object.
+    # @param field [Symbol,String] The field to extract.
+    # @param type [Class] The type to convert.
     def extract_and_serialize_value(builder, obj, field, type)
       v = if obj.is_a?(Hash)
-        obj[field]
+        obj[field] or obj[field.underscore]
       elsif obj.respond_to?(field)
         obj.send(field)
       elsif obj.respond_to?(field.underscore)
@@ -137,6 +151,10 @@ module Shapewear::Request
       end
     end
 
+    # Serializes an exception as a SOAP Envelope containing a SOAP Fault.
+    #
+    # @param ex [Exception] The Exception to serialize.
+    # @return [String] The SOAP Envelope containing the Fault.
     #noinspection RubyArgCount
     def serialize_soap_fault(ex)
       logger.debug "Serializing SOAP Fault: #{ex.inspect}"
@@ -167,6 +185,9 @@ module Shapewear::Request
       end
     end
 
+    # Returns the correct SOAP Envelope namespace.
+    #
+    # @return [String] The correct SOAP Envelope namespace.
     def soap_env_ns
       case soap_version
         when :soap11
