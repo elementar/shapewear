@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.3
+* More fixes for .NET interoperability.
+
 ## 0.1.2
 * Fixed a bug when returning SOAP:Faults.
 
