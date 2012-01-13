@@ -17,8 +17,8 @@ class CompleteService
             :returns => Fixnum
 
   operation :get_structured_data, :documentation => 'Returns structured data. 0 uses a Hash, 1 uses a struct, any other value raises a fault',
-            :parameters => [[:id, Fixnum]],
-            :returns => {:text => String, :random_value => Fixnum, :created_at => DateTime}
+            :parameters => [['ID', Fixnum]],
+            :returns => { :text => String, :random_value => Fixnum, :created_at => DateTime, 'XYZ' => String }
 
   def echo_in_uppercase(text)
     text.upcase unless text.nil?
@@ -33,19 +33,20 @@ class CompleteService
       when 0 then
         Structured.new('text from the struct')
       when 1 then
-        {:text => 'text from a hash', :random_value => rand(999), @created_at => DateTime.now}
+        { :text => 'text from a hash', :random_value => rand(999), :created_at => DateTime.now }
       else
         raise "ID must be 0 or 1"
     end
   end
 
   class Structured
-    attr_reader :text, :random_value, :created_at
+    attr_reader :text, :random_value, :created_at, :xyz
 
     def initialize(text)
       @text = text
       @random_value = rand(999)
       @created_at = DateTime.now
+      @xyz = 'xyz'
     end
   end
 end

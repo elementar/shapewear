@@ -92,7 +92,7 @@ module Shapewear::WSDL
           params.each do |p|
             t = p.last
             param_name = p.first
-            param_name = param_name.to_s.camelize if param_name.is_a?(Symbol)
+            param_name = param_name.camelize_if_symbol
             if t.nil?
               xseq.element :name => param_name, :minOccurs => 0, :maxOccurs => 1, :type => 'xsd:any'
             elsif t.is_a?(Class)
@@ -135,7 +135,7 @@ module Shapewear::WSDL
       xschema.complexType :name => "#{op_options[:public_name]}Struct" do |xctr|
         xctr.sequence do |xseqr|
           ret.each do |name, type|
-            name = name.to_s.camelize if name.is_a?(Symbol)
+            name = name.camelize_if_symbol
             xseqr.element :name => name, :minOccurs => 0, :maxOccurs => 1, :type => to_xsd_type(type)
           end
         end

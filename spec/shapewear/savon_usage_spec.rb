@@ -28,7 +28,7 @@ describe Shapewear do
       it "should work for structured responses from objects" do
         client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
         response = client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
-          soap.body = { 'Id' => 0 }
+          soap.body = { 'ID' => 0 }
         end
 
         r = response.body[:get_structured_data_response][:get_structured_data_result]
@@ -39,7 +39,7 @@ describe Shapewear do
       it "should work for structured responses from hashes" do
         client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
         response = client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
-          soap.body = { 'Id' => 1 }
+          soap.body = { 'ID' => 1 }
         end
 
         r = response.body[:get_structured_data_response][:get_structured_data_result]
@@ -52,7 +52,7 @@ describe Shapewear do
 
         expect {
           client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
-            soap.body = { 'Id' => 55 }
+            soap.body = { 'ID' => 55 }
           end
         }.to raise_error Savon::SOAP::Fault, "(e:Server.RuntimeError) ID must be 0 or 1"
       end
@@ -63,7 +63,7 @@ describe Shapewear do
         expect {
           client.request :get_structured_data, :xmlns => 'http://services.example.com/v1' do
             soap.version = 2
-            soap.body = { 'Id' => 55 }
+            soap.body = { 'ID' => 55 }
           end
         }.to raise_error Savon::SOAP::Fault, "(e:Server.RuntimeError) ID must be 0 or 1"
       end

@@ -71,8 +71,8 @@ module Shapewear::Request
       logger.debug "Operation node: #{node.inspect}"
       r = []
       op_options[:parameters].each do |p|
-        logger.debug "  Looking for: tns:#{p.first.to_s.camelize}"
-        v = node.xpath("tns:#{p.first.to_s.camelize}", namespaces).first
+        logger.debug "  Looking for: tns:#{p.first.camelize_if_symbol}"
+        v = node.xpath("tns:#{p.first.camelize_if_symbol}", namespaces).first
         if v.nil?
           # does nothing
         elsif p.last == Fixnum
@@ -124,14 +124,16 @@ module Shapewear::Request
         obj[field]
       elsif obj.respond_to?(field)
         obj.send(field)
+      elsif obj.respond_to?(field.underscore)
+        obj.send(field.underscore)
       else
         raise "Could not extract #{field.inspect} from object: #{obj.inspect}"
       end
 
       if v.nil?
-        builder.tag! field.to_s.camelize, 'xsi:nil' => 'true'
+        builder.tag! field.camelize_if_symbol, 'xsi:nil' => 'true'
       else
-        builder.tag! field.to_s.camelize, v
+        builder.tag! field.camelize_if_symbol, v
       end
     end
 
