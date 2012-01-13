@@ -93,7 +93,7 @@ module Shapewear::Request
       xb = Builder::XmlMarkup.new
       xb.instruct!
 
-      xb.Envelope 'xmlns:e' => soap_env_ns do |xenv|
+      xb.tag! 'e:Envelope', 'xmlns:e' => soap_env_ns do |xenv|
         xenv.tag! 'e:Body' do |xbody|
           xbody.tag! 'e:Fault' do |xf|
             case soap_version
