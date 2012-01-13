@@ -119,15 +119,14 @@ module Shapewear::WSDL
     xschema.element :name => "#{op_options[:public_name]}Response" do |xreq|
       xreq.complexType do |xct|
         xct.sequence do |xseq|
-          if ret.nil?
-            xseq.element :name => "#{op_options[:public_name]}Result", :minOccurs => 0, :maxOccurs => 1, :type => 'xsd:any'
-          elsif ret.is_a?(Class)
-            xseq.element :name => "#{op_options[:public_name]}Result", :minOccurs => 0, :maxOccurs => 1, :type => to_xsd_type(ret)
-          elsif ret.is_a?(Hash)
-            xseq.element :name => "#{op_options[:public_name]}Result", :minOccurs => 0, :maxOccurs => 1, :type => "tns:#{op_options[:public_name]}Struct"
-          else
-            raise "Could not interpret #{ret.inspect} as a return type definition"
-          end
+          xseq.element :name => "#{op_options[:public_name]}Result", :minOccurs => 0, :maxOccurs => 1,
+                       :type => case ret
+                         when NilClass then 'xsd:any'
+                         when Class then to_xsd_type(ret)
+                         when Hash then "tns:#{op_options[:public_name]}Struct"
+                         else
+                           raise "Could not interpret #{ret.inspect} as a return type definition"
+                       end
         end
       end
     end
