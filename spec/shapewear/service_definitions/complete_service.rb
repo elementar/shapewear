@@ -33,7 +33,7 @@ class CompleteService
       when 0 then
         Structured.new('text from the struct')
       when 1 then
-        { :text => 'text from a hash', :random_value => rand(999), :created_at => DateTime.now }
+        { :text => 'text from a hash', :random_value => rand(999), :created_at => DateTime.now, :xyz => 'xyz' }
       else
         raise "ID must be 0 or 1"
     end

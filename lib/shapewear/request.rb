@@ -135,7 +135,7 @@ module Shapewear::Request
     # @param type [Class] The type to convert.
     def extract_and_serialize_value(builder, obj, field, type)
       v = if obj.is_a?(Hash)
-        obj[field] or obj[field.underscore]
+        obj[field] or obj[field.to_sym] or obj[field.to_s.underscore] or obj[field.to_s.underscore.to_sym]
       elsif obj.respond_to?(field)
         obj.send(field)
       elsif obj.respond_to?(field.underscore)

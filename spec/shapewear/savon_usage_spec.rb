@@ -33,7 +33,7 @@ describe Shapewear do
 
         r = response.body[:get_structured_data_response][:get_structured_data_result]
         r.should be_a Hash
-        r.should include :text => 'text from the struct'
+        r.should include :text => 'text from the struct', :xyz => 'xyz'
       end
 
       it "should work for structured responses from hashes" do
@@ -44,7 +44,7 @@ describe Shapewear do
 
         r = response.body[:get_structured_data_response][:get_structured_data_result]
         r.should be_a Hash
-        r.should include :text => 'text from a hash'
+        r.should include :text => 'text from a hash', :xyz => 'xyz'
       end
 
       it "should raise SOAP 1.1 Faults" do
