@@ -39,7 +39,9 @@ class CompleteService
     end
   end
 
-  class Structured < Struct.new(:text, :random_value, :created_at)
+  class Structured
+    attr_reader :text, :random_value, :created_at
+
     def initialize(text)
       @text = text
       @random_value = rand(999)
