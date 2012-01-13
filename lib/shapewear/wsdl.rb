@@ -92,7 +92,7 @@ module Shapewear::WSDL
           params.each do |p|
             t = p.last
             param_name = p.first
-            param_name = param_name.camelize_if_symbol(false)
+            param_name = param_name.camelize_if_symbol(:lower)
             if t.nil?
               xseq.element :name => param_name, :minOccurs => 0, :maxOccurs => 1, :type => 'xsd:any'
             elsif t.is_a?(Class)

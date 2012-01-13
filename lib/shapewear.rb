@@ -27,18 +27,18 @@ end
 # defines String.camelize and String.underscore, if it is not defined by, e.g. Rails
 class String
   unless ''.respond_to? :camelize
-    def camelize(first_letter_in_uppercase = true)
-      if first_letter_in_uppercase
-        self.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
+    def camelize(first_letter = :upper)
+      if first_letter == :upper
+        self.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
       else
-        self.to_s[0].chr.downcase + self.camelize[1..-1]
+        self[0].chr.downcase + self.camelize[1..-1]
       end
     end
   end
 
   unless ''.respond_to? :underscore
     def underscore
-      word = self.to_s.dup
+      word = self.dup
       word.gsub!(/::/, '/')
       word.gsub!(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
       word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
@@ -50,11 +50,11 @@ class String
 end
 
 class Object
-  def camelize_if_symbol(first_letter_in_uppercase = true)
-    if is_a?(Symbol) then
-      to_s.camelize(first_letter_in_uppercase)
+  def camelize_if_symbol(first_letter = :upper)
+    if self.is_a?(Symbol)
+      self.to_s.camelize(first_letter)
     else
-      to_s
+      self.to_s
     end
   end
 end
