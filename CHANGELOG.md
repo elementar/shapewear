@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.5.1
+* Changed #camelize to work the same way as in Rails.
+
 ## 0.1.5
 * #camelize in parameters and complex types is only called if they are declared as symbols.
   This allows usage of custom character casing when writing the SOAP services.

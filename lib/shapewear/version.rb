@@ -2,6 +2,6 @@
 
 module Shapewear
 
-  Version = "0.1.5"
+  Version = "0.1.5.1"
 
 end
