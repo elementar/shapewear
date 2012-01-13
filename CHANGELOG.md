@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4
+* Parameters are now read in the correct order, as specified in the metadata;
+* Complex return types are now working correctly;
+* DRYed some code;
+* Added more logs.
+
 ## 0.1.3
 * More fixes for .NET interoperability.
 
