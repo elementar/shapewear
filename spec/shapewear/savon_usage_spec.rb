@@ -16,7 +16,7 @@ describe Shapewear do
       it "should work for simple requests" do
         client = Savon::Client.new 'http://services.example.com/complete/soap/wsdl'
         response = client.request :echo_in_uppercase, :xmlns => 'http://services.example.com/v1' do
-          soap.body = { 'Text' => 'uppercase text' }
+          soap.body = { :text => 'uppercase text' }
         end
 
         puts response.inspect

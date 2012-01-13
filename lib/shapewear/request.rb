@@ -71,8 +71,8 @@ module Shapewear::Request
       logger.debug "Operation node: #{node.inspect}"
       r = []
       op_options[:parameters].each do |p|
-        logger.debug "  Looking for: tns:#{p.first.camelize_if_symbol}"
-        v = node.xpath("tns:#{p.first.camelize_if_symbol}", namespaces).first
+        logger.debug "  Looking for: tns:#{p.first.camelize_if_symbol(false)}"
+        v = node.xpath("tns:#{p.first.camelize_if_symbol(false)}", namespaces).first
         if v.nil?
           # does nothing
         elsif p.last == Fixnum

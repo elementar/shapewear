@@ -31,7 +31,7 @@ class String
       if first_letter_in_uppercase
         self.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
       else
-        self.to_s[0].chr.downcase + self[1..-1].camelize
+        self.to_s[0].chr.downcase + self.camelize[1..-1]
       end
     end
   end
@@ -50,9 +50,9 @@ class String
 end
 
 class Object
-  def camelize_if_symbol
+  def camelize_if_symbol(first_letter_in_uppercase = true)
     if is_a?(Symbol) then
-      to_s.camelize
+      to_s.camelize(first_letter_in_uppercase)
     else
       to_s
     end
